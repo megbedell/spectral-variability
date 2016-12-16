@@ -70,7 +70,8 @@ The most important assumptions we make in this work are the following:
 
 Our model (likelihood) is described by
 \begin{eqnarray}
-  y_{ij} &=& f(\lambda'_{ij}) + \mathrm{systematics}_{ij} + \mathrm{noise}_{ij}
+  %y_{ij} &=& s_j f(\lambda'_{ij}) + \mathrm{systematics}_{ij} + \mathrm{noise}_{ij}
+   y_{ij} &=& s_j f(\lambda'_{ij})
   \\
   \lambda'_{ij} &=& \lambda_i\,\sqrt{\frac{1 - \beta_j}{1 + \beta_j}}
   \\
@@ -78,14 +79,15 @@ Our model (likelihood) is described by
   \quad , 
 \end{eqnarray}
 where the $y_{ij}$ is the continuum-normalized flux in pixel $i$ of
-spectrum $j$, $f()$ is a function of
+spectrum $j$, $s_j$ is a constant scaling factor related to the observed
+flux level at epoch $j$, $f()$ is a function of
 wavelength describing the intrinsic stellar spectrum, and
 $\lambda'_{ij}$ is the stellar rest-frame wavelength
 corresponding to the barycentric wavelength $\lambda_i$ observed at
 (dimensionless) velocity $\beta_j$.
-There are both (independent-ish, pixel) noise contributions and
-(covariant, low-rank) systematics contributions to the observed
-signal.
+%There are both (independent-ish, pixel) noise contributions and
+%(covariant, low-rank) systematics contributions to the observed
+%signal.
 We represent or generate these functions and latent variables
 with the following:
 \begin{eqnarray}
@@ -105,26 +107,45 @@ where the $a_m$ are expansion coefficients and the $g_m(\lambda)$
 are basis functions corresponding to a triangle centered at $x_m$ with half-width 
 $\Delta x$. For this implementation, we chose $x_m$ spaced evenly in $\log \lambda$, 
 with $\Delta x$ equal to the spacing between each $x_m$.
-We also have both systematics and noise, which we model with covariant
-and independent Gaussians:
-\begin{eqnarray}
-  \mathrm{systematics}_{ij} &=& \sum_{t=0}^{T-1} A_{jt}\,G_t(\lambda'_{ij})
-  \\
-  p(A_{jt}\given V_t) &=& \normal(A_{jt}\given 0,V_t)
-  \\
-  p(\mathrm{noise}_{ij}) &=& \normal(\mathrm{noise}_{ij}\given 0,\sigma_{ij}^2)
-  \quad ,
-\end{eqnarray}
-where the $A_{jt}$ are systematic noise amplitudes drawn from a
-Gaussians of variance $V_t$, the $G_{t}()$ are systematics functions
-(eigenfunctions, perhaps), and the pixel noise is all drawn
-independently (but heteroskedastically).
+%We also have both systematics and noise, which we model with covariant
+%and independent Gaussians:
+%\begin{eqnarray}
+%  \mathrm{systematics}_{ij} &=& \sum_{t=0}^{T-1} A_{jt}\,G_t(\lambda'_{ij})
+%  \\
+%  p(A_{jt}\given V_t) &=& \normal(A_{jt}\given 0,V_t)
+%  \\
+%  p(\mathrm{noise}_{ij}) &=& \normal(\mathrm{noise}_{ij}\given 0,\sigma_{ij}^2)
+%  \quad ,
+%\end{eqnarray}
+%where the $A_{jt}$ are systematic noise amplitudes drawn from a
+%Gaussians of variance $V_t$, the $G_{t}()$ are systematics functions
+%(eigenfunctions, perhaps), and the pixel noise is all drawn
+%independently (but heteroskedastically).
 Note that nothing about this model requires that the wavelength grid
 $\lambda_i$ be the same from spectrum to spectrum (that is, the
 wavelength grid can depend on $j$), and there is no requirement that
 the data at different epochs be similar in signal-to-noise. We do,
 effectively, at this point, assume that instrument resolution is
 identical (or very similar) from epoch to epoch.
+
+The free parameters to be optimized are the scaling factors $s_j$, the basis expansion
+coefficients $a_m$, and the radial velocities $\beta_j$. We use the derivative of 
+$y$ to perform this optimization:
+\begin{eqnarray}
+  %y_{ij} &=& s_j f(\lambda'_{ij}) + \mathrm{systematics}_{ij} + \mathrm{noise}_{ij}
+   \frac{dy_{ij}}{d \mathrm{par}} &=& \Big((\frac{\partial y_{ij}}{\partial s_j})^2 + 
+   \sum_{m=0}^{M-1}(\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial a_m})^2 + 
+  (\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta})^2\Big)^{\frac{1}{2}}
+  \\
+  \frac{\partial y_{ij}}{\partial s_j} &=& f(\lambda'_{ij})
+  \\
+  \frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial a_m} &=& s_j g_m(\lambda'_{ij})
+  \\
+  \frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta} &=& s_j a_m \frac{\partial g_m}{\partial \lambda'_{ij}}
+  \frac{\partial \lambda'_{ij}}{\partial \beta} = 
+  %\lambda'_{ij} &=& \lambda_i\,\sqrt{\frac{1 - \beta_j}{1 + \beta_j}}
+  \quad . 
+\end{eqnarray}
 
 
 \paragraph{Acknowledgements:}
