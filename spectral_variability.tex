@@ -94,8 +94,8 @@ with the following:
   g_m(\lambda) &=& \left\{
         \begin{array}{ll}
             0 & \quad \lambda \leq x_m -\Delta x \\
-            \frac{\lambda - x_m}{\Delta x} & \quad x_m - \Delta x \leq \lambda \leq x_m \\
-            \frac{x_m - \lambda}{\Delta x} & \quad x_m \leq \lambda \leq x_m + \Delta x \\
+            1 - \frac{\lambda - x_m}{\Delta x} & \quad x_m - \Delta x \leq \lambda \leq x_m \\
+            1 - \frac{x_m - \lambda}{\Delta x} & \quad x_m \leq \lambda \leq x_m + \Delta x \\
             0 & \quad \lambda \geq x_m + \Delta x
         \end{array}
     \right.
