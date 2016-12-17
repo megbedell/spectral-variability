@@ -1,10 +1,13 @@
+% This file is part of the spectral-variability project.
+% Copyright 2016, 2017 the authors.
+
 \documentclass[12pt, letterpaper]{article}
 \usepackage{amsmath}
-
 
 \newcommand{\acronym}[1]{{\small{#1}}}
 \newcommand{\project}[1]{\textsl{#1}}
 \newcommand{\Avast}{\project{A$\!$vast}}
+\newcommand{\harps}{\project{\acronym{HARPS}}}
 
 \newcommand{\unit}[1]{\mathrm{#1}}
 \newcommand{\m}{\unit{m}}
@@ -26,13 +29,35 @@
 
 \begin{document}
 
-\section*{Observing time variability of stellar spectra with \Avast}
+\section*{The variations with time of stellar spectra}
 
 \noindent
-by DWH, MB, others
+by MB, DWH, others
 
 \paragraph{Abstract:}
-
+% Context:
+Stellar surfaces churn with convection and rotation, carry
+time-variable star spots, and magnetically flare.
+A stellar spectrum ought to be a time-dependent mixture of temperatures
+and radiative processes.
+Indeed, 3-dimensional models of stars predict such variability, though
+it ought to be subtle.
+% Aims:
+In this project, we look for variations in stellar spectra for a few
+individual main-sequence stars that have many epochs of high
+resolution, high signal-to-noise spectroscopy taken with the
+\harps\ instrument.
+% Methods:
+Because the variations with time are subtle, we build an extremely
+precise (signal-to-noise in the thousands) smooth stellar spectrum
+model using all the specral epochs simultaneously, accounting for tiny
+radial-velocity changes, and significant throughput changes from epoch
+to epoch.
+We inspect, and take the variance of, the residuals away from this
+model as a function of wavelength to find time-variable narrow
+spectral features.
+% Results:
+We find YYY.
 
 \section{Introduction}
 
