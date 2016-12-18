@@ -121,9 +121,9 @@ with the following:
   g_m(\lambda) &=& \left\{
         \begin{array}{ll}
             0 & \quad \lambda \leq x_m -\Delta x \\
-            1 - \frac{\lambda - x_m}{\Delta x} & \quad x_m - \Delta x \leq \lambda \leq x_m \\
-            1 - \frac{x_m - \lambda}{\Delta x} & \quad x_m \leq \lambda \leq x_m + \Delta x \\
-            0 & \quad \lambda \geq x_m + \Delta x
+            1 - \frac{x_m - \lambda}{\Delta x} & \quad x_m - \Delta x \leq \lambda \leq x_m \\
+            1 - \frac{\lambda - x_m}{\Delta x} & \quad x_m \leq \lambda \leq x_m + \Delta x \\
+            0 & \quad \lambda \geq x_m + \Delta x \label{eqn:triangle}
         \end{array}
     \right.
   \quad ,
@@ -154,24 +154,37 @@ effectively, at this point, assume that instrument resolution is
 identical (or very similar) from epoch to epoch.
 
 The free parameters to be optimized are the scaling factors $s_j$, the basis expansion
-coefficients $a_m$, and the radial velocities $\beta_j$. We use the derivative of 
-$y$ to perform this optimization:
+coefficients $a_m$, and the radial velocities $\beta_j$. We use the $I\times J\times N_{par}$ matrix 
+of derivatives of $y_{ij}$ in the optimization:
 \begin{eqnarray}
-  %y_{ij} &=& s_j f(\lambda'_{ij}) + \mathrm{systematics}_{ij} + \mathrm{noise}_{ij}
-   \frac{dy_{ij}}{d \mathrm{par}} &=& \Big((\frac{\partial y_{ij}}{\partial s_j})^2 + 
-   \sum_{m=0}^{M-1}(\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial a_m})^2 + 
-  (\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta})^2\Big)^{\frac{1}{2}}
-  \\
-  \frac{\partial y_{ij}}{\partial s_j} &=& f(\lambda'_{ij})
+   %\frac{dy_{ij}}{d \mathrm{par}} &=& \Big((\frac{\partial y_{ij}}{\partial s_j})^2 + 
+   %\sum_{m=0}^{M-1}(\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial a_m})^2 + 
+  %(\frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta})^2\Big)^{\frac{1}{2}}
+  %\\
+  \frac{\partial y_{ij}}{\partial s_k} &=& f(\lambda'_{ij}) \delta_{jk}
   \\
   \frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial a_m} &=& s_j g_m(\lambda'_{ij})
   \\
-  \frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta} &=& s_j a_m \frac{\partial g_m}{\partial \lambda'_{ij}}
-  \frac{\partial \lambda'_{ij}}{\partial \beta} = 
-  %\lambda'_{ij} &=& \lambda_i\,\sqrt{\frac{1 - \beta_j}{1 + \beta_j}}
-  \quad . 
+  \frac{\partial y_{ij}}{\partial f} \frac{\partial f}{\partial \beta_k} &=& 
+  %s_j \sum_{m=0}^{M-1} a_m \frac{\partial g_m}{\partial \lambda'_{ij}} 
+  %\frac{\partial \lambda'_{ij}}{\partial \beta_k}  \delta_{jk} = 
+  - s_j \sum_{m=0}^{M-1} a_m g'_m(\lambda'_{ij}) \frac{\lambda'_{ij}}{(1 - \beta_k)(1 + \beta_k)}
+  \delta_{jk}
+  \quad ,
 \end{eqnarray}
-
+where $\delta$ is the Dirac delta function and $g'(\lambda)$ is the first derivative of equation \ref{eqn:triangle},
+defined as:
+\begin{equation}
+  g_m(\lambda) = \left\{
+        \begin{array}{ll}
+            0 & \quad \lambda \leq x_m -\Delta x \\
+            \frac{1}{\Delta x} & \quad x_m - \Delta x \leq \lambda \leq x_m \\
+            - \frac{1}{\Delta x} & \quad x_m \leq \lambda \leq x_m + \Delta x \\
+            0 & \quad \lambda \geq x_m + \Delta x
+        \end{array}
+    \right.
+    \quad .
+\end{equation}
 
 \paragraph{Acknowledgements:}
 Thanks to DFM for helping with the model.
