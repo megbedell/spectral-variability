@@ -107,11 +107,9 @@ Our model (likelihood) is described by
   \\
   x'_{ij} &\equiv& \ln \lambda_{ij}
   \\
-  x'_{ij} &=& x_i + \delta_j
+  x'_{ij} &=& x_i + \xi_j
   \\
-  \delta_j &=& \ln \sqrt{\frac{1 - \beta_j}{1 + \beta_j}}
-  \\
-  \beta &\equiv& \frac{\Delta v}{c}
+  \xi_j &\equiv& \ln \sqrt{\frac{1 + \frac{v_j}{c}}{1 - \frac{v_j}{c}}}
   \quad , 
 \end{eqnarray}
 where the $y_{ij}$ is the continuum-normalized flux in pixel $i$ of
@@ -121,7 +119,7 @@ wavelength describing the intrinsic stellar spectrum, and
 $x'_{ij}$ is the natural logarithm of the stellar rest-frame wavelength
 at pixel $i$ of spectrum $j$, 
 corresponding to the (log of the) barycentric wavelength $x_i$ observed at
-(dimensionless) velocity $\beta_j$.
+velocity $v_j$.
 %There are both (independent-ish, pixel) noise contributions and
 %(covariant, low-rank) systematics contributions to the observed
 %signal.
@@ -166,7 +164,7 @@ effectively, at this point, assume that instrument resolution is
 identical (or very similar) from epoch to epoch.
 
 The free parameters to be optimized are the scaling factors $s_j$, the basis expansion
-coefficients $a_m$, and the radial velocity shifts $\delta_j$. We use the $I\times J\times N_{par}$ matrix 
+coefficients $a_m$, and the Doppler shifts $\xi_j$. We use the $I\times J\times N_{par}$ matrix 
 of derivatives of $y_{ij}$ in the optimization:
 \begin{eqnarray}
    %\frac{dy_{ij}}{d \mathrm{par}} &=& \Big((\frac{\partial y_{ij}}{\partial s_j})^2 + 
@@ -177,7 +175,7 @@ of derivatives of $y_{ij}$ in the optimization:
   \\
   \frac{\partial y_{ij}}{\partial a_m} &=& s_j g_m(\lambda'_{ij})
   \\
-  \frac{\partial y_{ij}}{\partial \delta_k}  &=& 
+  \frac{\partial y_{ij}}{\partial \xi_k}  &=& 
   %s_j \sum_{m=0}^{M-1} a_m \frac{\partial g_m}{\partial \lambda'_{ij}} 
   %\frac{\partial \lambda'_{ij}}{\partial \beta_k}  \delta_{jk} = 
   s_j \sum_{m=0}^{M-1} a_m \frac{dg_m(x)}{dx}\bigg\rvert_{x=x'_{ij}} 
