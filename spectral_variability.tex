@@ -131,8 +131,8 @@ with the following:
   g_m(x) &=& \left\{
         \begin{array}{ll}
             0 & \quad x \leq x_m -\Delta x \\
-            1 - \frac{x_m - \lambda}{\Delta x} & \quad x_m - \Delta x \leq x \leq x_m \\
-            1 - \frac{\lambda - x_m}{\Delta x} & \quad x_m \leq x \leq x_m + \Delta x \\
+            1 - \frac{x_m - x}{\Delta x} & \quad x_m - \Delta x \leq x \leq x_m \\
+            1 - \frac{x - x_m}{\Delta x} & \quad x_m \leq x \leq x_m + \Delta x \\
             0 & \quad x \geq x_m + \Delta x \label{eqn:triangle}
         \end{array}
     \right.
